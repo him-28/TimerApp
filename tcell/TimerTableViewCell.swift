@@ -21,6 +21,9 @@ class TimerTableViewCell: UITableViewCell {
         timerDisplay.text = timerDisplay.text! + "1"
     }
     
+    @IBAction func resume(sender: UIButton) {
+    }
+    
     func setup() {
         //TODO: move to init
         self.selectionStyle = UITableViewCellSelectionStyle.None

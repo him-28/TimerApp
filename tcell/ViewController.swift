@@ -11,10 +11,14 @@ import UIKit
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     //SETUP TABLE ==================================
-    var times = [Timer]()
+    @IBOutlet weak var tableView: UITableView!
+    var times = [UserTimerModel]()
     var expanded = false
     
+    var timer = NSTimer()
+
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
         
         println("set row height")
         //FIXME: It causes looping!
@@ -59,24 +63,33 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func onTick() {
         let now = NSDate()
         for (i, timer) in enumerate(times) {
-            let seconds = (now.timeIntervalSinceReferenceDate - timer.timeStarted.timeIntervalSinceReferenceDate)/1000
-            if seconds >= timer.lengthInSeconds {
+            let seconds = floor(now.timeIntervalSinceReferenceDate - timer.leftSince.timeIntervalSinceReferenceDate)
+            if seconds >= timer.secondsLeft {
                 //ring
             }
             //update display
-            NSIndexPath(forRow: i, inSection: 0)
-            
+            let indexPath = NSIndexPath(forRow: i, inSection: 0)
+            let cell = (tableView.cellForRowAtIndexPath(indexPath)! as TimerTableViewCell)
+            cell.timerDisplay.text = "\(seconds)"
         }
-        
     }
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         println("view did load")
-        times.append(Timer(expanded: false, timeStarted: NSDate(), lengthInSeconds: 0))
+        times.append(UserTimerModel(leftSince: NSDate()))
         setNotification()
+        //reference app delegate
+        //AppDelegate appDelegate = UIApplication.sharedApplication().delegate!
+        let sel = Selector.convertFromStringLiteral("onTick")
+        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: sel, userInfo: nil, repeats: true)
+        //timer.invalidate()
+        
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -84,11 +97,5 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
 
-}
-
-struct Timer {
-    var expanded: Bool = false
-    var timeStarted: NSDate
-    var lengthInSeconds: Double = 0
 }
 

@@ -15,6 +15,7 @@
 		8525AD8F19F1736700A04FE6 /* tcellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8525AD8E19F1736700A04FE6 /* tcellTests.swift */; };
 		8525AD9919F1756A00A04FE6 /* TimerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8525AD9819F1756A00A04FE6 /* TimerTableViewCell.swift */; };
 		8577AB7C19F2ADB500A580E3 /* tritone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8577AB7B19F2ADB500A580E3 /* tritone.mp3 */; };
+		8577AB7E19F2D80900A580E3 /* UserTimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8577AB7D19F2D80900A580E3 /* UserTimerModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		8525AD8E19F1736700A04FE6 /* tcellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tcellTests.swift; sourceTree = "<group>"; };
 		8525AD9819F1756A00A04FE6 /* TimerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerTableViewCell.swift; sourceTree = "<group>"; };
 		8577AB7B19F2ADB500A580E3 /* tritone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = tritone.mp3; sourceTree = "<group>"; };
+		8577AB7D19F2D80900A580E3 /* UserTimerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTimerModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 				8525AD7F19F1736600A04FE6 /* Images.xcassets */,
 				8525AD8119F1736600A04FE6 /* LaunchScreen.xib */,
 				8525AD7619F1736600A04FE6 /* Supporting Files */,
+				8577AB7D19F2D80900A580E3 /* UserTimerModel.swift */,
 			);
 			path = tcell;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8577AB7E19F2D80900A580E3 /* UserTimerModel.swift in Sources */,
 				8525AD7B19F1736600A04FE6 /* ViewController.swift in Sources */,
 				8525AD7919F1736600A04FE6 /* AppDelegate.swift in Sources */,
 				8525AD9919F1756A00A04FE6 /* TimerTableViewCell.swift in Sources */,
