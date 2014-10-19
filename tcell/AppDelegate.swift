@@ -17,10 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // set notification setting
         let notificationSetting = UIUserNotificationSettings(
             forTypes: UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound,
             categories: nil)
         application.registerUserNotificationSettings(notificationSetting)
+        
         return true
     }
     
@@ -38,7 +41,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
         //DID RECEIVE LOCAL NOTIF
-        playSound()
+        //playSound()
+        
         
         
     }
@@ -60,6 +64,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        println("Application active")
+        println("Scheduled notifications \(UIApplication.sharedApplication().scheduledLocalNotifications)")
     }
 
     func applicationWillTerminate(application: UIApplication) {

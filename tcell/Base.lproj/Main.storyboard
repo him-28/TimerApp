@@ -50,12 +50,13 @@
                                                     <rect key="frame" x="25" y="13" width="30" height="30"/>
                                                     <state key="normal" title="Play"/>
                                                     <connections>
-                                                        <action selector="resume:" destination="tsK-GU-Oyi" eventType="touchUpInside" id="CSn-16-RL2"/>
+                                                        <action selector="changeState:" destination="tsK-GU-Oyi" eventType="touchUpInside" id="FTg-8W-8KG"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="changeStateBtn" destination="Ozf-fy-PLA" id="JyF-ha-7e4"/>
                                             <outlet property="timerDisplay" destination="uov-wt-5V0" id="h7c-Px-QLZ"/>
                                         </connections>
                                     </tableViewCell>

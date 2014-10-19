@@ -13,20 +13,49 @@ class TimerTableViewCell: UITableViewCell {
     
     //Properties
     
-    var expanded:Bool = false
+    weak var timerModel: UserTimerModel?
     
     @IBOutlet weak var timerDisplay: UILabel!
     
+    @IBOutlet weak var changeStateBtn: UIButton!
+    
     @IBAction func addTenMinutes(sender: UIButton) {
-        timerDisplay.text = timerDisplay.text! + "1"
+        addToTime(10*60)
     }
     
-    @IBAction func resume(sender: UIButton) {
+    func addToTime(seconds:Double) {
+        timerModel!.lengthInSeconds += seconds
+        timerModel!.secondsLeft += seconds
+        canRunTimer()
     }
     
-    func setup() {
+    
+    @IBAction func changeState(sender: UIButton) {
+        let running = !timerModel!.running
+        timerModel!.running = running
+        let image = running ? "pause.png" : "run.png"
+        sender.setTitle(image, forState: UIControlState.Normal)
+        //sender.setBackgroundImage(UIImage(named: image), forState: UIControlState.Normal)
+        if running {
+            timerModel!.leftSince = NSDate()
+        } else {
+            //update how much time is left
+            timerModel!.secondsLeft -= NSDate().timeIntervalSinceDate(timerModel!.leftSince)
+        }
+    }
+    
+    func setup(timerModel: UserTimerModel) {
         //TODO: move to init
+        self.timerModel = timerModel
+        timerDisplay.text = "0"
         self.selectionStyle = UITableViewCellSelectionStyle.None
+        canRunTimer()
+    }
+    
+    func canRunTimer() -> Bool {
+        let canRun = (timerModel!.lengthInSeconds > 0)
+        changeStateBtn.enabled = canRun
+        return canRun
     }
     
     
