@@ -52,7 +52,9 @@ class TimerTableViewCell: UITableViewCell {
             timerModel!.leftSince = NSDate()
         } else {
             //update how much time is left
-            timerModel!.secondsLeft -= NSDate().timeIntervalSinceDate(timerModel!.leftSince)
+            let timeDiff = NSDate().timeIntervalSinceDate(timerModel!.leftSince)
+            timerModel!.secondsLeft -= timeDiff
+            timerModel!.elapsed += timeDiff
         }
     }
     
@@ -70,12 +72,24 @@ class TimerTableViewCell: UITableViewCell {
             let secondsElapsed = time.timeIntervalSinceDate(timerModel!.leftSince)
             let secondsNowLeft = timerModel!.secondsLeft - secondsElapsed
             
-            timerDisplay.text = "\(secondsNowLeft)"
-            progress.progress =  0.5
+            timerDisplay.text = secondsToString(secondsNowLeft)
+            progress.progress =  Float((timerModel!.elapsed + secondsElapsed) / timerModel!.lengthInSeconds)
             return secondsNowLeft >= 0
         } else {
-            timerDisplay.text = "\(timerModel!.secondsLeft)"
+            timerDisplay.text = secondsToString(timerModel!.secondsLeft)
+            progress.progress =  timerModel!.lengthInSeconds > 0 ? Float(timerModel!.elapsed / timerModel!.lengthInSeconds) : 0
             return false
+        }
+    }
+    
+    func secondsToString(seconds: Double) -> String {
+        let hours = floor(seconds / 3600)
+        let minutes = floor((seconds / 60) - hours * 60)
+        let sec = seconds - 3600 * hours - 60 * minutes
+        if hours > 0 {
+            return "\(Int(hours)) h \(Int(minutes))"
+        } else {
+            return "\(Int(minutes)) m \(Int(sec))"
         }
     }
     
