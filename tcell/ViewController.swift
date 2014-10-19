@@ -14,8 +14,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var tableView: UITableView!
     
     var timerModels = [UserTimerModel]()
-    
-    var timer = NSTimer()
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
@@ -56,6 +54,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 //ring
             }
         }
+        println("tick")
     }
     
     override func viewDidLoad() {
@@ -63,9 +62,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Do any additional setup after loading the view, typically from a nib.
         println("view did load")
         timerModels.append(UserTimerModel(leftSince: NSDate()))
-        
-        let sel = Selector.convertFromStringLiteral("onTick")
-        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: sel, userInfo: nil, repeats: true)
         
         // Restore session
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -75,8 +71,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             timerModels = outData.map({ data in (NSKeyedUnarchiver.unarchiveObjectWithData(data) as UserTimerModel) })
             println("Read \(timerModels[0].secondsLeft)")
         }
-        
-        //timer.invalidate()
         
     }
     

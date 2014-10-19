@@ -37,16 +37,14 @@ class TimerTableViewCell: UITableViewCell {
     func addToTime(seconds:Double) {
         timerModel!.lengthInSeconds += seconds
         timerModel!.secondsLeft += seconds
-        canRunTimer()
+        updateChangeStateBtn()
         updateAndShallRing()
     }
-    
     
     @IBAction func changeState(sender: UIButton) {
         let running = !timerModel!.running
         timerModel!.running = running
-        let image = running ? "pause.png" : "run.png"
-        sender.setTitle(image, forState: UIControlState.Normal)
+        updateChangeStateBtn()
         //sender.setBackgroundImage(UIImage(named: image), forState: UIControlState.Normal)
         if running {
             timerModel!.leftSince = NSDate()
@@ -63,7 +61,7 @@ class TimerTableViewCell: UITableViewCell {
         self.timerModel = timerModel
         updateAndShallRing()
         self.selectionStyle = UITableViewCellSelectionStyle.None
-        canRunTimer()
+        updateChangeStateBtn()
     }
     
     func updateAndShallRing() -> Bool {
@@ -74,7 +72,15 @@ class TimerTableViewCell: UITableViewCell {
             
             timerDisplay.text = secondsToString(secondsNowLeft)
             progress.progress =  Float((timerModel!.elapsed + secondsElapsed) / timerModel!.lengthInSeconds)
-            return secondsNowLeft >= 0
+            if secondsNowLeft <= 1 {
+                timerModel!.running = false
+                timerModel!.secondsLeft = 0
+                timerModel!.leftSince = time
+                updateChangeStateBtn()
+                return true
+            } else {
+                return false
+            }
         } else {
             timerDisplay.text = secondsToString(timerModel!.secondsLeft)
             progress.progress =  timerModel!.lengthInSeconds > 0 ? Float(timerModel!.elapsed / timerModel!.lengthInSeconds) : 0
@@ -93,11 +99,13 @@ class TimerTableViewCell: UITableViewCell {
         }
     }
     
-    func canRunTimer() -> Bool {
-        let canRun = (timerModel!.lengthInSeconds > 0)
+    func updateChangeStateBtn() {
+        let canRun = (timerModel!.secondsLeft > 0)
         changeStateBtn.enabled = canRun
-        return canRun
+        
+        let image = timerModel!.running ? "pause" : "run"
+        changeStateBtn.setTitle(image, forState: UIControlState.Normal)
+        
     }
-    
     
 }

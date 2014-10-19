@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var audioPlayer : AVAudioPlayer?
+    var timer : NSTimer?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -43,8 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //DID RECEIVE LOCAL NOTIF
         //playSound()
         
-        
-        
     }
 
 
@@ -68,13 +67,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //Schedule Notifications
         for timer in viewController.timerModels {
-            let notif = UILocalNotification()
-            notif.fireDate = timer.leftSince.dateByAddingTimeInterval(timer.secondsLeft)
-            notif.alertBody = "\(timer.lengthInSeconds) are up"
-            notif.soundName = UILocalNotificationDefaultSoundName
-            notif.applicationIconBadgeNumber = 1
-            application.scheduleLocalNotification(notif)
+            if timer.running {
+                let notif = UILocalNotification()
+                notif.fireDate = timer.leftSince.dateByAddingTimeInterval(timer.secondsLeft)
+                notif.alertBody = "\(timer.lengthInSeconds) are up"
+                notif.soundName = UILocalNotificationDefaultSoundName
+                notif.applicationIconBadgeNumber = 1
+                application.scheduleLocalNotification(notif)
+            }
         }
+        
+        timer?.invalidate()
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
@@ -88,6 +91,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let scheduled = application.scheduledLocalNotifications as [UILocalNotification]
         println("Scheduled notifications \(scheduled)")
         application.cancelAllLocalNotifications()
+        
+        // Set timer
+        let viewController = window!.rootViewController as ViewController
+        let sel = Selector.convertFromStringLiteral("onTick")
+        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: viewController, selector: sel, userInfo: nil, repeats: true)
 
     }
 
