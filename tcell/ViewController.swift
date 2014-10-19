@@ -48,59 +48,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //=================================================
     
-    func setNotification() {
-        let notif = UILocalNotification()
-        let seconds = 5.0
-        let date = NSDate(timeIntervalSinceNow: seconds)
-
-        notif.fireDate = date
-        notif.alertBody = "fired at \(date)"
-        notif.soundName = UILocalNotificationDefaultSoundName
-        notif.applicationIconBadgeNumber = 1
-        UIApplication.sharedApplication().scheduleLocalNotification(notif)
-    }
-    
     func onTick() {
-        let now = NSDate()
         for (i, timer) in enumerate(timerModels) {
-            if timerModels[i].running {
-                let seconds = now.timeIntervalSinceDate(timer.leftSince)
-                if seconds >= timer.secondsLeft {
-                    //ring
-                }
-                //update display
-                let indexPath = NSIndexPath(forRow: i, inSection: 0)
-                let cell = (tableView.cellForRowAtIndexPath(indexPath)! as TimerTableViewCell)
-                
-                cell.timerDisplay.text = "\(floor(timer.secondsLeft - seconds))"
+            let indexPath = NSIndexPath(forRow: i, inSection: 0)
+            let cell = (tableView.cellForRowAtIndexPath(indexPath)! as TimerTableViewCell)
+            if cell.updateAndShallRing() {
+                //ring
             }
         }
     }
-    
-//    NSArray *eventArray = [[UIApplication sharedApplication] scheduledLocalNotifications];
-//    for (int i=0; i<[eventArray count]; i++)
-//    {
-//    UILocalNotification *note = [eventArray objectAtIndex:i];
-//    NSDictionary *userInfoCurrent = note.userInfo;
-//    NSString *title = [NSString stringWithFormat:@"%@", [userInfoCurrent valueForKey:@"title"]];
-//    if ([title isEqualToString:[activity objectForKey:@"title"]])
-//    {
-//    //Cancelling local notification
-//    [[UIApplication sharedApplication] cancelLocalNotification:note];
-//    // Change fire date and reschedule here...
-//    }
-//    }
-    
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         println("view did load")
         timerModels.append(UserTimerModel(leftSince: NSDate()))
-        //setNotification()
-        //reference app delegate
-        let appDelegate = UIApplication.sharedApplication().delegate!
         
         let sel = Selector.convertFromStringLiteral("onTick")
         timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: sel, userInfo: nil, repeats: true)

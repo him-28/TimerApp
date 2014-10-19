@@ -19,15 +19,26 @@ class TimerTableViewCell: UITableViewCell {
     
     @IBOutlet weak var changeStateBtn: UIButton!
     
+    @IBOutlet weak var progress: UIProgressView!
+    
+    @IBAction func addOneHour(sender: AnyObject) {
+        addToTime(60*60)
+    }
     @IBAction func addTenMinutes(sender: UIButton) {
         addToTime(10*60)
     }
-    
+    @IBAction func addOneMinute(sender: AnyObject) {
+        addToTime(60)
+    }
+    @IBAction func addTenSeconds(sender: AnyObject) {
+        addToTime(10)
+    }
+
     func addToTime(seconds:Double) {
         timerModel!.lengthInSeconds += seconds
         timerModel!.secondsLeft += seconds
         canRunTimer()
-        updateDisplay(timerModel!.secondsLeft)
+        updateAndShallRing()
     }
     
     
@@ -48,13 +59,24 @@ class TimerTableViewCell: UITableViewCell {
     func setup(timerModel: UserTimerModel) {
         //TODO: move to init
         self.timerModel = timerModel
-        updateDisplay(timerModel.secondsLeft)
+        updateAndShallRing()
         self.selectionStyle = UITableViewCellSelectionStyle.None
         canRunTimer()
     }
     
-    func updateDisplay(seconds: Double) {
-        timerDisplay.text = "\(seconds)"
+    func updateAndShallRing() -> Bool {
+        if timerModel!.running {
+            let time = NSDate()
+            let secondsElapsed = time.timeIntervalSinceDate(timerModel!.leftSince)
+            let secondsNowLeft = timerModel!.secondsLeft - secondsElapsed
+            
+            timerDisplay.text = "\(secondsNowLeft)"
+            progress.progress =  0.5
+            return secondsNowLeft >= 0
+        } else {
+            timerDisplay.text = "\(timerModel!.secondsLeft)"
+            return false
+        }
     }
     
     func canRunTimer() -> Bool {

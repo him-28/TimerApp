@@ -57,13 +57,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
-        let viewController = (window!.rootViewController as ViewController)
+        //Save Data
+        let viewController = window!.rootViewController as ViewController
         let userDefaults = NSUserDefaults.standardUserDefaults()
         
         let data = viewController.timerModels.map({ timer in NSKeyedArchiver.archivedDataWithRootObject(timer) })
         userDefaults.setObject(data, forKey: "timers")
         userDefaults.synchronize()
         println("Saved data")
+        
+        //Schedule Notifications
+        for timer in viewController.timerModels {
+            let notif = UILocalNotification()
+            notif.fireDate = timer.leftSince.dateByAddingTimeInterval(timer.secondsLeft)
+            notif.alertBody = "\(timer.lengthInSeconds) are up"
+            notif.soundName = UILocalNotificationDefaultSoundName
+            notif.applicationIconBadgeNumber = 1
+            application.scheduleLocalNotification(notif)
+        }
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
@@ -73,7 +84,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         println("Application active")
-        println("Scheduled notifications \(UIApplication.sharedApplication().scheduledLocalNotifications)")
+        let application = UIApplication.sharedApplication()
+        let scheduled = application.scheduledLocalNotifications as [UILocalNotification]
+        println("Scheduled notifications \(scheduled)")
+        application.cancelAllLocalNotifications()
+
     }
 
     func applicationWillTerminate(application: UIApplication) {
