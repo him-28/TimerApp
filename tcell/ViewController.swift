@@ -104,6 +104,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let sel = Selector.convertFromStringLiteral("onTick")
         timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: sel, userInfo: nil, repeats: true)
+        
+        // Restore session
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let outAny: AnyObject = userDefaults.objectForKey("timers") {
+            //load a stored session
+            let outData = outAny as [NSData]
+            timerModels = outData.map({ data in (NSKeyedUnarchiver.unarchiveObjectWithData(data) as UserTimerModel) })
+            println("Read \(timerModels[0].secondsLeft)")
+        }
+        
         //timer.invalidate()
         
     }

@@ -27,6 +27,7 @@ class TimerTableViewCell: UITableViewCell {
         timerModel!.lengthInSeconds += seconds
         timerModel!.secondsLeft += seconds
         canRunTimer()
+        updateDisplay(timerModel!.secondsLeft)
     }
     
     
@@ -47,9 +48,13 @@ class TimerTableViewCell: UITableViewCell {
     func setup(timerModel: UserTimerModel) {
         //TODO: move to init
         self.timerModel = timerModel
-        timerDisplay.text = "0"
+        updateDisplay(timerModel.secondsLeft)
         self.selectionStyle = UITableViewCellSelectionStyle.None
         canRunTimer()
+    }
+    
+    func updateDisplay(seconds: Double) {
+        timerDisplay.text = "\(seconds)"
     }
     
     func canRunTimer() -> Bool {
